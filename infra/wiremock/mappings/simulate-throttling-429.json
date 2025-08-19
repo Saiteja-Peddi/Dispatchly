@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/sms/send"
+  },
+  "response": {
+    "status": 429,
+    "jsonBody": {
+      "error": "Too Many Requests"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

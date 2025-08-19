@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/sms/send"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "messageId": "12345",
+      "status": "accepted"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

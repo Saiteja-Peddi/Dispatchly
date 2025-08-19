@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'spring-services'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      # Add your service containers here
+      # e.g., targets: ['service1:8080', 'service2:8080'] A static list of targets to scrape.
+      # Each entry is <host>:<port>. Since everything runs in the same Docker network, host = container name
+      - targets: []

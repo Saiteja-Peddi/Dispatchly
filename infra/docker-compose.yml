@@ -1,0 +1,164 @@
+
+services:
+  dynamodb-local:
+    image: amazon/dynamodb-local:3.0.0
+    container_name: dynamodb-local
+    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "/home/dynamodblocal/data"]
+    ports:
+      - "8000:8000"                    # DynamoDB Local endpoint -> http://localhost:8000
+    volumes:
+      - dynamodb_data:/home/dynamodblocal/data  # Persist DB files
+    networks:
+      - app_net
+
+  kafka:
+    image: apache/kafka:4.0.0
+    container_name: kafka
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+      - ./kafka/config/kraft/kafka.properties:/opt/kafka/config/kraft/kafka.properties:ro
+    ports:
+      - "9092:9092"   # client connections
+      - "9093:9093"   # controller quorum (internal)
+    command: ["/opt/kafka/bin/kafka-server-start.sh", "/opt/kafka/config/kraft/kafka.properties"]
+    networks:
+      - app_net
+    healthcheck:
+      test: [ "CMD-SHELL", "bash -c '</dev/tcp/127.0.0.1/9092'" ]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  mailpit:
+    image: axllent/mailpit:v1.27.4   # dev-only; pin a version in CI
+    container_name: mailpit
+    ports:
+#      - "1025:1025"   # SMTP Not needed if applications are in the same network.
+      - "8025:8025"   # Web UI
+    environment:
+      MP_MAX_MESSAGES: "1000"
+      # Leave UI open locally; set "user:pass" if you need auth
+      MP_UI_AUTH: ""
+      # Accept any SMTP auth if you decide to test auth flows later
+      MP_SMTP_AUTH_ACCEPT_ANY: "true"
+      MP_SMTP_AUTH_ALLOW_INSECURE: "true"
+      MP_DATA_FILE: "/data/mailpit.db"
+    volumes:
+      - mailpit_data:/data
+    healthcheck:
+      test: [ "CMD", "wget", "-qO-", "http://localhost:8025/health" ]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+    networks:
+      - app_net
+
+  wiremock:
+    image: wiremock/wiremock:3.13.1
+    container_name: wiremock
+    ports:
+      - "8080:8080"   # WireMock HTTP API
+    command:
+      - "--verbose"
+      - "--global-response-templating"
+    volumes:
+      - ./wiremock/mappings:/home/wiremock/mappings:ro
+      - ./wiremock/__files:/home/wiremock/__files:ro
+    healthcheck:
+      test: [ "CMD", "wget", "-qO-", "http://localhost:8080/__admin/health" ]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+    restart: unless-stopped
+    networks:
+      - app_net
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.72.0   # pin a version for stability
+    container_name: jaeger
+    ports:
+      - "16686:16686"   # Jaeger UI -> http://localhost:16686
+#      Uncomment the following lines if you want to expose Jaeger collector endpoints outside the network
+#      - "4317:4317"     # OTLP gRPC endpoint (OpenTelemetry SDKs)
+#      - "4318:4318"     # OTLP HTTP endpoint
+    expose:
+      - "4317"   # OTLP gRPC endpoint (internal)
+      - "4318"   # OTLP HTTP endpoint (internal)
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
+    networks:
+      - app_net
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v3.4.2
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports: [ "9090:9090" ]        # UI
+    networks:
+      - app_net
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:12.1.1
+    container_name: grafana
+    ports: [ "3000:3000" ]        # UI
+    networks:
+      - app_net
+    restart: unless-stopped
+
+  loki:
+    image: grafana/loki:3.5
+    container_name: loki
+    command: [ "-config.file=/etc/loki/local-config.yaml" ]
+    volumes:
+      - ./loki/local-config.yaml:/etc/loki/local-config.yaml:ro
+    ports: [ "3100:3100" ]        # API (Grafana datasource)
+    networks:
+      - app_net
+    restart: unless-stopped
+
+  promtail:
+    image: grafana/promtail:3.5
+    container_name: promtail
+    command: [ "-config.file=/etc/promtail/config.yml" ]
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./promtail/config.yml:/etc/promtail/config.yml:ro
+    networks:
+      - app_net
+    restart: unless-stopped
+
+
+# Uncomment the following section if you want to initialize Kafka storage
+# Note: This is only needed if you are using KRaft mode and need to format the storage.
+# This step is typically done only at first run or when changing the storage format or ran docker-compose down -v command.
+# Command to run this service for setting up Kafka storage: docker-compose run --rm kafka-init
+#  kafka-init:
+#    image: apache/kafka:4.0.0
+#    restart: "no"
+#    volumes:
+#      - kafka_data:/var/lib/kafka/data
+#      - ./kafka/config/kraft/kafka.properties:/opt/kafka/config/kraft/kafka.properties:ro
+#      - ./kafka/bootstrap.sh:/opt/kafka/bootstrap.sh:ro
+#    # hand Bash a single, simple command string (no newlines to parse)
+#    entrypoint: [ "/bin/bash","-lc","/opt/kafka/bootstrap.sh" ]
+
+
+volumes:
+  dynamodb_data:
+    name: dynamodb_data
+
+  kafka_data:
+    name: kafka_data
+
+  mailpit_data:
+    name: mailpit_data
+
+networks:
+  app_net:
+    driver: bridge                    # Use the bridge driver for network isolation

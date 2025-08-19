@@ -1,0 +1,25 @@
+# Normalize all text files to LF
+* text=auto eol=lf
+
+# Treat Java/TS/YAML/JSON/MD as text (ensure proper diffs)
+*.java text
+*.ts text
+*.tsx text
+*.js text
+*.jsx text
+*.json text
+*.yml text
+*.yaml text
+*.md text
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.jar binary
+
+# Special diff drivers
+*.md diff=markdown
+*.java diff=java

@@ -1,0 +1,44 @@
+# top-level EditorConfig
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+[*.java]
+indent_size = 4
+ij_continuation_indent_size = 4
+max_line_length = 120
+
+# Prevents wildcard imports (*) until there are more than 9999 classes from the same package
+# Effectively disables wildcard imports
+ij_java_class_count_to_use_import_on_demand = 9999
+
+# Same as above but for static imports
+ij_java_names_count_to_use_import_on_demand = 9999
+
+# Import ordering: Android first, then all others, then grouped by package hierarchy
+# Each group is separated by a blank line (|)
+ij_java_imports_layout = $android,*,|,javax.**,|,java.**,|,org.**,|,com.**,|,$*
+
+# Forces if/while/for statements to be on multiple lines for better readability
+ij_java_keep_control_statement_in_one_line = false
+
+# Enables automatic line wrapping for lines exceeding max_line_length
+ij_java_wrap_long_lines = true
+
+[*.{yml,yaml}]
+max_line_length = 80
+quote_type = single
+
+
+[*.md]
+max_line_length = 80
+trim_trailing_whitespace = false
+
+[*.{ts,tsx,js,jsx}]
+max_line_length = 120
