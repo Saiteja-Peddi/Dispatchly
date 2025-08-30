@@ -1,0 +1,77 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- Inherit from repo root (NOT from spring-boot-starter-parent) -->
+  <parent>
+    <groupId>com.dispatchly</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.0.1</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>app</artifactId>
+  <name>app</name>
+  <description>Root Spring Boot application that wires all the modules</description>
+  <packaging>jar</packaging>
+
+  <dependencies>
+
+    <!-- Your domain modules (bring beans into the Boot context) -->
+    <dependency><groupId>com.dispatchly</groupId><artifactId>api</artifactId></dependency>
+    <dependency><groupId>com.dispatchly</groupId><artifactId>dispatcher</artifactId></dependency>
+    <dependency><groupId>com.dispatchly</groupId><artifactId>notifications</artifactId></dependency>
+    <dependency><groupId>com.dispatchly</groupId><artifactId>templates</artifactId></dependency>
+    <dependency><groupId>com.dispatchly</groupId><artifactId>preferences</artifactId></dependency>
+    <dependency><groupId>com.dispatchly</groupId><artifactId>channel-email</artifactId></dependency>
+    <dependency><groupId>com.dispatchly</groupId><artifactId>channel-sms</artifactId></dependency>
+    <dependency><groupId>com.dispatchly</groupId><artifactId>outbox</artifactId></dependency>
+    <dependency><groupId>com.dispatchly</groupId><artifactId>shared</artifactId></dependency>
+
+
+    <!-- app-only starters -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.springframework.kafka</groupId>-->
+<!--      <artifactId>spring-kafka</artifactId>-->
+<!--    </dependency>-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+
+    <!-- Observability export (Prometheus endpoint) -->
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-registry-prometheus</artifactId>
+    </dependency>
+
+
+    <!-- test -->
+<!--    <dependency>-->
+<!--      <groupId>org.springframework.kafka</groupId>-->
+<!--      <artifactId>spring-kafka-test</artifactId>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+</project>

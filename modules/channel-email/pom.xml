@@ -1,0 +1,66 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.dispatchly</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.0.1</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>channel-email</artifactId>
+  <name>channel-email</name>
+  <description>
+    Implements the email sending adapter, turning attempts into real SMTP/SES/Mailpit calls. It updates attempt status
+    in DynamoDB and emits result events back to Kafka.
+  </description>
+  <packaging>jar</packaging>
+
+  <dependencies>
+    <!-- Spring Boot starter for core beans, configuration, logging -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+
+    <!-- JavaMail support for SMTP (used for Mailpit locally, SES SMTP, etc.) -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mail</artifactId>
+    </dependency>
+
+    <!-- Kafka client to publish outcome events back to notification.outcome topic -->
+    <dependency>
+      <groupId>org.springframework.kafka</groupId>
+      <artifactId>spring-kafka</artifactId>
+    </dependency>
+
+    <!-- AWS SDK for SES (if later you want to integrate directly instead of SMTP) -->
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>ses</artifactId>
+      <optional>true</optional>
+    </dependency>
+
+    <!-- DynamoDB SDK for persisting attempt status -->
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>dynamodb</artifactId>
+    </dependency>
+
+    <!-- Shared domain objects (DTOs, error codes, constants) -->
+    <dependency>
+      <groupId>com.dispatchly</groupId>
+      <artifactId>shared</artifactId>
+    </dependency>
+
+    <!-- Test support -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>

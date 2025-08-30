@@ -1,0 +1,47 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.dispatchly</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.0.1</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>preferences</artifactId>
+  <name>preferences</name>
+  <description>
+    Encodes user consent rules and quiet hours for channels like email and SMS. Dispatcher consults it to decide whether
+    a message is allowed or must be delayed.
+  </description>
+  <packaging>jar</packaging>
+
+  <dependencies>
+    <!-- Core Spring context, DI, logging -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+
+    <!-- AWS SDK for DynamoDB: store user preferences and quiet hour rules -->
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>dynamodb</artifactId>
+    </dependency>
+
+    <!-- Shared DTOs/constants so dispatcher & api can query preference results consistently -->
+    <dependency>
+      <groupId>com.dispatchly</groupId>
+      <artifactId>shared</artifactId>
+    </dependency>
+
+    <!-- Test dependencies -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>

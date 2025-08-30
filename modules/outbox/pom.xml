@@ -1,0 +1,58 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.dispatchly</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.0.1</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>outbox</artifactId>
+  <name>outbox</name>
+  <description>
+    Stores domain events atomically alongside data changes in DynamoDB. A background publisher then reliably forwards
+    those events to Kafka and marks them processed.
+  </description>
+
+  <dependencies>
+    <!-- Core DI, config, logging -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+
+    <!-- Persist idempotency + timeline records in DynamoDB Local / AWS DDB -->
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>dynamodb</artifactId>
+    </dependency>
+
+    <!-- (Optional) publish status changes (requested→dispatched→failed) to Kafka -->
+    <dependency>
+      <groupId>org.springframework.kafka</groupId>
+      <artifactId>spring-kafka</artifactId>
+    </dependency>
+
+    <!-- JSON (de)serialization for storing payloads / Kafka JsonSerializer -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+
+    <!-- Shared DTOs/enums (NotificationRequest, Status, errors) -->
+    <dependency>
+      <groupId>com.dispatchly</groupId>
+      <artifactId>shared</artifactId>
+    </dependency>
+
+    <!-- Tests (JUnit 5, AssertJ, Mockito) -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>

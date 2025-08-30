@@ -1,0 +1,82 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.dispatchly</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.0.1</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>arch</artifactId>
+  <name>arch</name>
+  <description>Contains ArchUnit tests that enforce dependency boundaries between modules. It prevents accidental
+    cross-module coupling and keeps the modular design clean.
+  </description>
+  <packaging>jar</packaging>
+  <dependencies>
+    <!-- ArchUnit + JUnit 5 integration: lets you write architecture rules as tests -->
+    <dependency>
+      <groupId>com.tngtech.archunit</groupId>
+      <artifactId>archunit-junit5</artifactId>
+      <version>1.3.2</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Spring Boot test starter: brings in JUnit 5, AssertJ, Mockito -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Internal modules: add them with test scope so ArchUnit can inspect compiled classes -->
+    <dependency>
+      <groupId>com.dispatchly</groupId>
+      <artifactId>api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.dispatchly</groupId>
+      <artifactId>dispatcher</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.dispatchly</groupId>
+      <artifactId>notifications</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.dispatchly</groupId>
+      <artifactId>templates</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.dispatchly</groupId>
+      <artifactId>preferences</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.dispatchly</groupId>
+      <artifactId>channel-email</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.dispatchly</groupId>
+      <artifactId>channel-sms</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.dispatchly</groupId>
+      <artifactId>outbox</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.dispatchly</groupId>
+      <artifactId>shared</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>

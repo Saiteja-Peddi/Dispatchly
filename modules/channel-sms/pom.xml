@@ -1,0 +1,66 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.dispatchly</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.0.1</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>channel-sms</artifactId>
+  <name>channel-sms</name>
+  <description>
+    Implements the SMS sending adapter, integrating with WireMock mocks. It manages retries, failures, and status
+    updates for SMS delivery attempts.
+  </description>
+  <packaging>jar</packaging>
+
+  <dependencies>
+    <!-- Core Spring Boot starter (logging, config, DI) -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+
+    <!-- HTTP client (for calling WireMock or real SMS provider REST APIs) -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <!-- Kafka client for publishing outcome events -->
+    <dependency>
+      <groupId>org.springframework.kafka</groupId>
+      <artifactId>spring-kafka</artifactId>
+    </dependency>
+
+    <!-- AWS SDK for DynamoDB (to record SMS delivery status/retries) -->
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>dynamodb</artifactId>
+    </dependency>
+
+    <!-- Shared domain objects (NotificationOutcome, constants, error codes) -->
+    <dependency>
+      <groupId>com.dispatchly</groupId>
+      <artifactId>shared</artifactId>
+    </dependency>
+
+    <!-- (Optional) AWS SNS SDK if you later want to send SMS directly via AWS SNS instead of REST provider -->
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>sns</artifactId>
+      <optional>true</optional>
+    </dependency>
+
+    <!-- Testing (JUnit, MockMvc, WireMock client) -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>

@@ -1,0 +1,70 @@
+<!-- modules/dispatcher/pom.xml -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.dispatchly</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.0.1</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+  <artifactId>dispatcher</artifactId>
+  <name>dispatcher</name>
+  <description>
+    Orchestrates the notification workflow, deciding when and how to send based on preferences, templates, and retries.
+    It consumes events from Kafka and creates delivery attempts for the right channels.
+  </description>
+  <packaging>jar</packaging>
+
+  <dependencies>
+    <!-- Core Spring context, config, logging -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+
+    <!-- Kafka consumer/producer to read notification.requested and emit internal events -->
+    <dependency>
+      <groupId>org.springframework.kafka</groupId>
+      <artifactId>spring-kafka</artifactId>
+    </dependency>
+
+    <!-- JSON (Jackson) to parse/produce message payloads on Kafka -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+
+    <!-- Use business APIs from other modules; dispatcher orchestrates them -->
+    <dependency>
+      <groupId>com.dispatchly</groupId>
+      <artifactId>preferences</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.dispatchly</groupId>
+      <artifactId>templates</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.dispatchly</groupId>
+      <artifactId>outbox</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.dispatchly</groupId>
+      <artifactId>shared</artifactId>
+    </dependency>
+
+    <!-- Tests: JUnit/Assertions/Mockito + Kafka test utilities (EmbeddedBroker, records, etc.) -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.kafka</groupId>
+      <artifactId>spring-kafka-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+
+</project>
